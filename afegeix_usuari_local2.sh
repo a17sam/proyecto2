@@ -3,7 +3,7 @@
 # Make sure the script is being executed with superuser privileges.
 if [ $(id -u) -eq 0 ]; then
 
-# If the user doesn't supply at least one argument, then give them help.
+	# If the user doesn't supply at least one argument, then give them help.
 	if [ $# -lt 1 ]; then
 	echo  "Error: No se ha introducido un usuario"
 	echo "Uso del programa: $0 usuario nombre completo"
@@ -15,7 +15,7 @@ if [ $(id -u) -eq 0 ]; then
 	exit 1
 	fi
   
-# The first parameter is the user name.
+	# The first parameter is the user name.
 	username=$1
 	# The rest of the parameters are for the account comments.
 	fulln=${@:2}
@@ -36,3 +36,11 @@ if [ $(id -u) -eq 0 ]; then
 		# Set the password.
 		# Check to see if the passwd command succeeded.
 		# Display the username, password, and the host where the user was created.
+		[ $? -eq 0 ] && echo -e "\nEl usuario ha sido creado correctamente! \n\nUsuario: \n$username \n\nContraseña: \n$password \n\nHost: \n$hostname\n" || echo "No se ha podido crear el usuario!"
+		# Force password change on first login.
+		chage -d 0 $username
+	fi
+else
+  echo "Solo el root del sistema puede crear nuevos usuarios"
+  exit 3
+fi
